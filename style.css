@@ -1,0 +1,108 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFCF90;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Mantener para evitar barras de scroll */
+}
+
+.calculator-popup {
+  background-color: #f5f5dc; /* Beige claro */
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h1, p, label {
+  color: #941827; /* Granate */
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+label {
+  margin-right: 5px;
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+
+input {
+  border: 2px solid #941827;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  padding: 5px;
+  width: 100px;
+  text-align: center;
+  background-color: #f5f5dc;
+  color: #941827;
+  vertical-align: middle;
+  margin-bottom: 20px; /* Añadir espacio debajo */
+}
+
+/* Para navegadores que soportan ocultar flechas en input number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input:disabled {
+  background-color: #ddd;
+  color: #777;
+  cursor: not-allowed;
+}
+
+#resetButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  background: #941827;
+  color: white;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: none; /* Oculto inicialmente */
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+#resetButton:hover {
+    background: #b82033; /* Un poco más claro al pasar el ratón */
+}
+
+.steps > div {
+  margin-bottom: 10px; /* Espacio entre pasos/respuesta */
+  line-height: 1.4; /* Mejorar legibilidad */
+  color: #333; /* Color de texto más oscuro para pasos/respuesta */
+}
+
+#ai-response {
+    min-height: 40px; /* Espacio reservado para la respuesta */
+    font-style: italic;
+}
+
+#ai-response > div { /* Estilo para el mensaje de carga/respuesta */
+    color: #333;
+}
