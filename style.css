@@ -11,11 +11,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Mantener para evitar barras de scroll */
+  overflow: hidden; 
 }
 
 .calculator-popup {
-  background-color: #f5f5dc; /* Beige claro */
+  background-color: #f5f5dc; 
   border-radius: 15px;
   padding: 30px;
   max-width: 400px;
@@ -25,7 +25,7 @@ body {
 }
 
 h1, p, label {
-  color: #941827; /* Granate */
+  color: #941827; 
 }
 
 h1 {
@@ -53,10 +53,10 @@ input {
   background-color: #f5f5dc;
   color: #941827;
   vertical-align: middle;
-  margin-bottom: 20px; /* Añadir espacio debajo */
+  margin-bottom: 20px;
 }
 
-/* Para navegadores que soportan ocultar flechas en input number */
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -64,7 +64,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 input[type=number] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield; 
 }
 
 input:disabled {
@@ -82,27 +82,27 @@ input:disabled {
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  display: none; /* Oculto inicialmente */
+  display: none; 
   margin-left: auto;
   margin-right: auto;
   width: fit-content;
 }
 
 #resetButton:hover {
-    background: #b82033; /* Un poco más claro al pasar el ratón */
+    background: #b82033; 
 }
 
 .steps > div {
-  margin-bottom: 10px; /* Espacio entre pasos/respuesta */
-  line-height: 1.4; /* Mejorar legibilidad */
-  color: #333; /* Color de texto más oscuro para pasos/respuesta */
+  margin-bottom: 10px;
+  line-height: 1.4; 
+  color: #333; 
 }
 
 #ai-response {
-    min-height: 40px; /* Espacio reservado para la respuesta */
+    min-height: 40px; 
     font-style: italic;
 }
 
-#ai-response > div { /* Estilo para el mensaje de carga/respuesta */
+#ai-response > div {
     color: #333;
 }
