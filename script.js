@@ -1,10 +1,8 @@
-// --- Referencias a Elementos del DOM ---
 const multiplierInput = document.getElementById("multiplier");
 const stepsDiv = document.getElementById("steps");
 const aiResponseDiv = document.getElementById("ai-response");
 const resetButton = document.getElementById("resetButton");
 
-// --- Mensajes de Fallback (si falla la llamada al backend/IA) ---
 const brandEssenceMessages = [
   "Recuerda la lección de la pizarra: no importa cuánto se compliquen las cosas, tu esencia siempre vuelve.",
   "Como el 9, tu 'número' interior te define. Vuelve a él para encontrar tu camino.",
@@ -18,7 +16,7 @@ const brandEssenceMessages = [
   "Permítete 'volver a la pizarra' de tu vida. Tu esencia, tu '9', siempre estará ahí para guiarte."
 ];
 
-// --- Estado y Configuración ---
+
 let calculationInProgress = false;
 const stepTypingDuration = 800;
 const responseTypingDuration = 1500;
@@ -26,9 +24,8 @@ const typingSpeed = 25;
 const postTypingDelay = 300;
 const backendApiUrl = 'https://alwaysnin9calculator.azurewebsites.net/api/generate-message';
 const debounceDelay = 500;
-const resetShowDelay = 2000; // Delay antes de mostrar botón reset tras respuesta (ajustado en finally)
+const resetShowDelay = 2000; 
 
-// --- Funciones Principales ---
 
 function validateInput(value) {
   const num = Number(value);
@@ -115,7 +112,7 @@ async function generatePersonalizedIAResponse() {
             body: JSON.stringify({})
         });
 
-        // CAMBIO #4: Eliminada la espera artificial ("await new Promise...") de aquí
+
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -135,18 +132,13 @@ async function generatePersonalizedIAResponse() {
 
     } catch (error) {
         console.error('Error al obtener respuesta del backend/IA:', error);
-        // Limpiar "Loading..." también en caso de error antes de mostrar fallback
         aiResponseDiv.innerHTML = "";
-
-        // --- Lógica de Fallback ---
         const randomIndex = Math.floor(Math.random() * brandEssenceMessages.length);
         const fallbackMessage = brandEssenceMessages[randomIndex];
         typeWriterEffect(aiResponseDiv, ` ${fallbackMessage}`, responseTypingDuration);
 
     } finally {
-         // Asegurar que el botón y el input se reactiven después de un tiempo prudencial
-         // (después de que la animación de escritura termine)
-         const finalDelay = postTypingDelay + responseTypingDuration + 100; // Pequeño margen extra
+         const finalDelay = postTypingDelay + responseTypingDuration + 100; 
          setTimeout(() => {
             resetButton.style.display = "block";
             calculationInProgress = false;
@@ -155,25 +147,19 @@ async function generatePersonalizedIAResponse() {
     }
 }
 
-// --- Utilidad Debounce y Event Listeners ---
 
 function debounce(func, delay) {
   let timeout;
   return (...args) => {
     clearTimeout(timeout);
-    // Ya no llamamos a resetCalculator aquí,
-    // dejamos que la interfaz se actualice al inicio de calculate()
     timeout = setTimeout(() => func(...args), delay);
   };
 }
 
-// Calcular al escribir en el input (con debounce)
 multiplierInput.addEventListener("input", debounce(calculate, debounceDelay));
 
-// CAMBIO #3: Añadido Event Listener para el botón Reset
 resetButton.addEventListener('click', resetCalculator);
 
-// --- Función Reset ---
 function resetCalculator() {
   multiplierInput.value = "";
   multiplierInput.disabled = false;
@@ -181,5 +167,5 @@ function resetCalculator() {
   aiResponseDiv.textContent = "";
   resetButton.style.display = "none";
   calculationInProgress = false;
-  multiplierInput.focus(); // Devolver foco al input
+  multiplierInput.focus();
 }
