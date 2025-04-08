@@ -4,7 +4,7 @@ Una sencilla calculadora web que demuestra la fascinante propiedad matemática d
 
 ---
 
-**▶️ [VER LA CALCULADORA EN VIVO / LIVE DEMO](https://ExT-Veredey.github.io/AlwaysNin9CreativeStudio/) ◀️**
+**▶️ [VER LA CALCULADORA EN VIVO / LIVE DEMO](https://ext-yeredey.github.io/AlwaysNin9CreativeStudio/) ◀️**
 
 ---
 
@@ -40,7 +40,7 @@ Esta filosofía es también la que impulsa **“always nin9”**, nuestro estudi
 
 ## 💡 Cómo Usar la Calculadora
 
-1.  Abre la [calculadora en vivo](https://ExT-Veredey.github.io/AlwaysNin9CreativeStudio/).
+1.  Abre la [calculadora en vivo](https://ext-yeredey.github.io/AlwaysNin9CreativeStudio/).
 2.  Introduce un número entero positivo (entre 1 y 999999).
 3.  Espera 2 segundos después de dejar de escribir.
 4.  Observa los cálculos y lee el mensaje.
