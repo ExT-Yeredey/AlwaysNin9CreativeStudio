@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #FFCF90;
+  background-color: #ffffff;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -15,7 +15,7 @@ body {
 }
 
 .calculator-popup {
-  background-color: #f5f5dc; 
+  background-color: #ffffff; 
   border-radius: 15px;
   padding: 30px;
   max-width: 400px;
@@ -25,7 +25,7 @@ body {
 }
 
 h1, p, label {
-  color: #941827; 
+  color: #941827;
 }
 
 h1 {
@@ -50,12 +50,11 @@ input {
   padding: 5px;
   width: 100px;
   text-align: center;
-  background-color: #f5f5dc;
+  background-color: ##ffffff;
   color: #941827;
   vertical-align: middle;
   margin-bottom: 20px;
 }
-
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -82,7 +81,7 @@ input:disabled {
   font-size: 1.1rem;
   border-radius: 8px;
   cursor: pointer;
-  display: none; 
+  display: none;
   margin-left: auto;
   margin-right: auto;
   width: fit-content;
@@ -93,7 +92,7 @@ input:disabled {
 }
 
 .steps > div {
-  margin-bottom: 10px;
+  margin-bottom: 10px; 
   line-height: 1.4; 
   color: #333; 
 }
