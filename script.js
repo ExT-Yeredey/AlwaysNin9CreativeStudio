@@ -16,16 +16,14 @@ const brandEssenceMessages = [
   "Permítete 'volver a la pizarra' de tu vida. Tu esencia, tu '9', siempre estará ahí para guiarte."
 ];
 
-
 let calculationInProgress = false;
 const stepTypingDuration = 800;
 const responseTypingDuration = 1500;
 const typingSpeed = 25;
 const postTypingDelay = 300;
 const backendApiUrl = 'https://alwaysnin9calculator.azurewebsites.net/api/generate-message';
-const debounceDelay = 500;
-const resetShowDelay = 2000; 
-
+const debounceDelay = 2000;
+const resetShowDelay = 2000;
 
 function validateInput(value) {
   const num = Number(value);
@@ -34,23 +32,18 @@ function validateInput(value) {
 
 function calculate() {
   if (calculationInProgress) return;
-
   const multiplier = parseInt(multiplierInput.value, 10);
   stepsDiv.innerHTML = "";
   aiResponseDiv.innerHTML = "";
-
-  if (!validateInput(multiplier)) {
-    stepsDiv.innerHTML = `<div>⚠️ Por favor, introduce un número válido (1 - 999999).</div>`;
+  if (multiplierInput.value === "" || !validateInput(multiplier)) {
     resetButton.style.display = "none";
     calculationInProgress = false;
     multiplierInput.disabled = false;
     return;
   }
-
   calculationInProgress = true;
   multiplierInput.disabled = true;
   resetButton.style.display = "none";
-
   const product = 9 * multiplier;
   showStep(`9 × ${multiplier} = ${product}`, () => {
     sumDigits(product);
@@ -80,8 +73,8 @@ function sumDigits(number) {
 function typeWriterEffect(element, text, baseDuration, callback) {
   let i = 0;
   element.textContent = "";
-  const estimatedInterval = Math.max(typingSpeed, baseDuration / Math.max(1, text.length));
-
+  const textLength = Math.max(1, text.length);
+  const estimatedInterval = Math.max(typingSpeed, baseDuration / textLength);
   const intervalId = setInterval(() => {
     if (i < text.length) {
       element.textContent += text.charAt(i);
@@ -89,7 +82,7 @@ function typeWriterEffect(element, text, baseDuration, callback) {
     } else {
       clearInterval(intervalId);
       if (callback) {
-        setTimeout(callback, postTypingDelay);
+        callback(); // Llamar al callback cuando termina el efecto de escritura
       }
     }
   }, estimatedInterval);
@@ -103,61 +96,58 @@ function showLoading() {
 }
 
 async function generatePersonalizedIAResponse() {
-    showLoading();
-
-    try {
-        const response = await fetch(backendApiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({})
-        });
-
-
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Error ${response.status} del backend: ${errorText || response.statusText}`);
-        }
-
-        const responseData = await response.json();
-        const aiMessage = responseData?.message;
-
-        if (aiMessage) {
-             aiResponseDiv.innerHTML = ""; // Limpiar "Loading..." ANTES de escribir
-             typeWriterEffect(aiResponseDiv, aiMessage.trim(), responseTypingDuration);
-        } else {
-            console.error("Respuesta del backend OK, pero falta campo 'message':", responseData);
-            throw new Error("Formato de respuesta inesperado del backend.");
-        }
-
-    } catch (error) {
-        console.error('Error al obtener respuesta del backend/IA:', error);
-        aiResponseDiv.innerHTML = "";
-        const randomIndex = Math.floor(Math.random() * brandEssenceMessages.length);
-        const fallbackMessage = brandEssenceMessages[randomIndex];
-        typeWriterEffect(aiResponseDiv, ` ${fallbackMessage}`, responseTypingDuration);
-
-    } finally {
-         const finalDelay = postTypingDelay + responseTypingDuration + 100; 
-         setTimeout(() => {
-            resetButton.style.display = "block";
-            calculationInProgress = false;
-            multiplierInput.disabled = false;
-        }, finalDelay);
+  showLoading();
+  try {
+    const response = await fetch(backendApiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status} del backend: ${errorText || response.statusText}`);
     }
+    const responseData = await response.json();
+    const aiMessage = responseData?.message;
+    if (aiMessage) {
+      aiResponseDiv.innerHTML = "";
+      typeWriterEffect(aiResponseDiv, aiMessage.trim(), responseTypingDuration, () => { // Pasar una función callback a typeWriterEffect
+        resetButton.style.display = "block"; // Mostrar el botón de reset después de que el mensaje de la IA se haya mostrado
+        calculationInProgress = false;
+        multiplierInput.disabled = false;
+      });
+    } else {
+      console.error("Respuesta del backend OK, pero falta campo 'message':", responseData);
+      throw new Error("Formato de respuesta inesperado del backend.");
+    }
+  } catch (error) {
+    console.error('Error al obtener respuesta del backend/IA:', error);
+    aiResponseDiv.innerHTML = "";
+    const randomIndex = Math.floor(Math.random() * brandEssenceMessages.length);
+    const fallbackMessage = brandEssenceMessages[randomIndex];
+    typeWriterEffect(aiResponseDiv, ` ${fallbackMessage}`, responseTypingDuration, () => { // También pasar callback aquí
+      resetButton.style.display = "block";
+      calculationInProgress = false;
+      multiplierInput.disabled = false;
+    });
+  } finally {
+    const responseTextLength = aiResponseDiv.textContent?.length || 50;
+    const estimatedResponseAnimTime = Math.max(typingSpeed * responseTextLength, responseTypingDuration);
+    const finalDelay = postTypingDelay + estimatedResponseAnimTime + 100;
+  }
 }
-
 
 function debounce(func, delay) {
   let timeout;
   return (...args) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), delay);
+    timeout = setTimeout(() => func.apply(this, args), delay);
   };
 }
 
 multiplierInput.addEventListener("input", debounce(calculate, debounceDelay));
-
 resetButton.addEventListener('click', resetCalculator);
 
 function resetCalculator() {
