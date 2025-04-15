@@ -6,16 +6,16 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: ##941827;
+  background-color: #941827;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .calculator-popup {
-  background-color: ##941827; 
+  background-color: #ffffff;
   border-radius: 15px;
   padding: 30px;
   max-width: 400px;
@@ -63,7 +63,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 input[type=number] {
-  -moz-appearance: textfield; 
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 input:disabled {
@@ -74,34 +75,40 @@ input:disabled {
 
 #resetButton {
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 0;
   border: none;
-  background: #941827;
-  color: white;
-  font-size: 1.1rem;
-  border-radius: 8px;
+  background: none;
   cursor: pointer;
   display: none;
   margin-left: auto;
   margin-right: auto;
-  width: fit-content;
+  width: 50px;
+  height: 50px;
+  background-image: url("https://github.com/ExT-Yeredey/AlwaysNin9CreativeStudio/blob/main/Reset.png?raw=true");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #resetButton:hover {
-    background: #b82033; 
+  opacity: 0.7;
+}
+
+#resetButton:active {
+  transform: scale(0.9);
 }
 
 .steps > div {
-  margin-bottom: 10px; 
-  line-height: 1.4; 
-  color: #333; 
+  margin-bottom: 10px;
+  line-height: 1.4;
+  color: #333;
 }
 
 #ai-response {
-    min-height: 40px; 
-    font-style: italic;
+  min-height: 40px;
+  font-style: italic;
 }
 
 #ai-response > div {
-    color: #333;
+  color: #333;
 }
