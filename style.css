@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #941827;
+  background-color: #4e0113;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -25,7 +25,7 @@ body {
 }
 
 h1, p, label {
-  color: #941827;
+  color: #4e0113;
 }
 
 h1 {
@@ -44,14 +44,14 @@ label {
 }
 
 input {
-  border: 2px solid #941827;
+  border: 2px solid #4e0113;
   border-radius: 8px;
   font-size: 1.5rem;
   padding: 5px;
   width: 100px;
   text-align: center;
   background-color: #ffffff;
-  color: #941827;
+  color: #4e0113;
   vertical-align: middle;
   margin-bottom: 20px;
 }
