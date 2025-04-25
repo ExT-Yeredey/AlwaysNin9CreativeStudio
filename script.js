@@ -23,24 +23,49 @@ const typingSpeed = 25;
 const postTypingDelay = 300;
 const backendApiUrl = 'https://alwaysnin9calculator.azurewebsites.net/api/generate-message';
 const debounceDelay = 2000;
-const resetShowDelay = 2000;
+const resetShowDelay = 2000; 
 
 function validateInput(value) {
   const num = Number(value);
-  return Number.isInteger(num) && num > 0 && num < 1000000;
+
+  return Number.isInteger(num) && num >= 0 && num < 1000000;
 }
 
 function calculate() {
   if (calculationInProgress) return;
-  const multiplier = parseInt(multiplierInput.value, 10);
+  const multiplierValue = multiplierInput.value; 
+  const multiplier = parseInt(multiplierValue, 10);
   stepsDiv.innerHTML = "";
   aiResponseDiv.innerHTML = "";
-  if (multiplierInput.value === "" || !validateInput(multiplier)) {
+
+  if (multiplierValue === "0") {
+    calculationInProgress = true; 
+    multiplierInput.disabled = true; 
+    resetButton.style.display = "none"; 
+
+    const zeroMessage = "Has puesto un cero.\nMuy original… Enhorabuena rebelde\nPero.. el 9 ya lo había previsto.";
+    const messageContainer = document.createElement('div');
+    messageContainer.style.whiteSpace = 'pre-wrap'; 
+    aiResponseDiv.appendChild(messageContainer);
+
+
+    typeWriterEffect(messageContainer, zeroMessage, responseTypingDuration, () => {
+
+        resetButton.style.display = "block";
+
+        calculationInProgress = false;
+   
+    });
+    return;
+  }
+
+  if (multiplierValue === "" || !validateInput(multiplierValue) || multiplier <= 0) {
     resetButton.style.display = "none";
     calculationInProgress = false;
     multiplierInput.disabled = false;
     return;
   }
+
   calculationInProgress = true;
   multiplierInput.disabled = true;
   resetButton.style.display = "none";
@@ -49,6 +74,7 @@ function calculate() {
     sumDigits(product);
   });
 }
+
 
 function showStep(text, callback) {
   const stepElement = document.createElement("div");
@@ -64,7 +90,7 @@ function sumDigits(number) {
     } else if (sum === 9) {
       generatePersonalizedIAResponse();
     } else {
-      console.error("Suma final inesperada:", sum);
+      console.error("Suma final inesperada (no es 9):", sum);
       resetCalculator();
     }
   });
@@ -75,18 +101,29 @@ function typeWriterEffect(element, text, baseDuration, callback) {
   element.textContent = "";
   const textLength = Math.max(1, text.length);
   const estimatedInterval = Math.max(typingSpeed, baseDuration / textLength);
-  const intervalId = setInterval(() => {
+
+  function type() {
     if (i < text.length) {
-      element.textContent += text.charAt(i);
+      if (text.charAt(i) === '\n') {
+        element.appendChild(document.createElement('br'));
+      } else {
+         element.appendChild(document.createTextNode(text.charAt(i)));
+      }
       i++;
+      setTimeout(type, estimatedInterval);
     } else {
-      clearInterval(intervalId);
       if (callback) {
-        callback(); // Llamar al callback cuando termina el efecto de escritura
+        callback();
       }
     }
-  }, estimatedInterval);
+  }
+   if (text.length > 0) {
+      type();
+   } else if (callback) {
+        callback();
+   }
 }
+
 
 function showLoading() {
   aiResponseDiv.innerHTML = "";
@@ -105,16 +142,19 @@ async function generatePersonalizedIAResponse() {
       },
       body: JSON.stringify({})
     });
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Error ${response.status} del backend: ${errorText || response.statusText}`);
     }
+
     const responseData = await response.json();
     const aiMessage = responseData?.message;
+
     if (aiMessage) {
       aiResponseDiv.innerHTML = "";
-      typeWriterEffect(aiResponseDiv, aiMessage.trim(), responseTypingDuration, () => { // Pasar una función callback a typeWriterEffect
-        resetButton.style.display = "block"; // Mostrar el botón de reset después de que el mensaje de la IA se haya mostrado
+      typeWriterEffect(aiResponseDiv, aiMessage.trim(), responseTypingDuration, () => {
+        resetButton.style.display = "block";
         calculationInProgress = false;
         multiplierInput.disabled = false;
       });
@@ -125,19 +165,17 @@ async function generatePersonalizedIAResponse() {
   } catch (error) {
     console.error('Error al obtener respuesta del backend/IA:', error);
     aiResponseDiv.innerHTML = "";
+
     const randomIndex = Math.floor(Math.random() * brandEssenceMessages.length);
     const fallbackMessage = brandEssenceMessages[randomIndex];
-    typeWriterEffect(aiResponseDiv, ` ${fallbackMessage}`, responseTypingDuration, () => { // También pasar callback aquí
-      resetButton.style.display = "block";
-      calculationInProgress = false;
-      multiplierInput.disabled = false;
+    typeWriterEffect(aiResponseDiv, ` ${fallbackMessage}`, responseTypingDuration, () => {
+       resetButton.style.display = "block";
+       calculationInProgress = false;
+       multiplierInput.disabled = false; 
     });
-  } finally {
-    const responseTextLength = aiResponseDiv.textContent?.length || 50;
-    const estimatedResponseAnimTime = Math.max(typingSpeed * responseTextLength, responseTypingDuration);
-    const finalDelay = postTypingDelay + estimatedResponseAnimTime + 100;
   }
 }
+
 
 function debounce(func, delay) {
   let timeout;
@@ -156,6 +194,6 @@ function resetCalculator() {
   stepsDiv.textContent = "";
   aiResponseDiv.textContent = "";
   resetButton.style.display = "none";
-  calculationInProgress = false;
-  multiplierInput.focus();
+  calculationInProgress = false; 
+  multiplierInput.focus(); 
 }
